@@ -4,15 +4,28 @@ opsworks-up
 Vagrantfile for Amazon Opsworks-compatible development.
 
 Requirements
--------------------
+------------
 
-- vagrant
- Easy installers for all platforms available at http://downloads.vagrantup.com/
-- git
- Easy installers for all platforms available at http://git-scm.com/downloads
+- *vagrant* - Easy installers for all platforms available at http://downloads.vagrantup.com/
+- *git* - Easy installers for all platforms available at http://git-scm.com/downloads
+
+Details
+-------
+
+Amazon Opsworks uses Chef recipes for its stack management system.  However it uses an old
+version and requires a gem that does not come with a vagrant VM by default.
+
+This Vagrantfile does the following to try and emulate the opsworks environment:
+
+1. Installs "make" so we can install our own version of chef.
+2. Uninstalls chef 0.10.x, then installs chef 0.9.18.  
+(OpsWorks uses 0.9.15.x @TODO: confirm exact versions and that the versions are compatible.)
+3. Installs "bundler" gem.
+
 
 Installation
----------------
+------------
+
 Each Opsworks stack should be a clone of this project.  Make a new directory 
 for each stack you want to fire up in Vagrant.
 
