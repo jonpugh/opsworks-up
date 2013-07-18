@@ -38,8 +38,10 @@ Copy the example attributes file:
 
     cp attributes.json.example attributes.json
     
-Edit your attributes.json file to fit your local computer's settings.  You will need to 
-know where you cloned the opsworks cookbooks and your custom cookbooks.
+Edit your attributes.json file to fit your local computer's settings, and to set 
+opsworks/chef attributes.
+
+You will need to know where you cloned the opsworks cookbooks and your custom cookbooks.
 
     vim attributes.json
 
@@ -49,5 +51,6 @@ you call "vagrant-up".  Opsworks or custom recipes can be added to the run list.
 Then, launch a VM:
 
     vagrant-up
-    
+
+
     
