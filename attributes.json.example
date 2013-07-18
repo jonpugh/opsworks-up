@@ -8,8 +8,8 @@
     "hostname": "db-a2",
     "host_only_ip": "10.10.10.10",
     "cookbooks_path": [
-      "/home/jon/Repos/spry/digicationopsworks",
-      "/home/jon/Repos/aws/opsworks-cookbooks"
+      "/path/to/opsworks-cookbooks",
+      "/path/to/custom-cookbooks"
     ]
   },
   "opsworks": {
