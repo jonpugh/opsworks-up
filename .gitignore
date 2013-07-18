@@ -1,2 +1,4 @@
 # Prevent local changes to attributes from being committed.
 attributes.json
+# Hide .vagrant folder
+.vagrant
