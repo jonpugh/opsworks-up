@@ -1,0 +1,25 @@
+{
+  "run_list": [
+    "recipe[apt]",
+    "recipe[mysql::server]"
+  ],
+  "vagrant": {
+    "adapter": "wlan0",
+    "hostname": "db-a2",
+    "host_only_ip": "10.10.10.10",
+    "cookbooks_path": [
+      "/home/jon/Repos/spry/digicationopsworks",
+      "/home/jon/Repos/aws/opsworks-cookbooks"
+    ]
+  },
+  "opsworks": {
+    "instance": {
+      "instance_type": "t1.micro",
+      "hostname": "db-a2"
+    }
+  },
+  "mysql": {
+    "server_root_password": "jwklfjkdlsajfklsajfkdsafdafsafas"
+  }
+}
+
