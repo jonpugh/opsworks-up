@@ -12,6 +12,11 @@ Vagrant.configure("2") do |config|
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
   # Attributes are loaded from attributes.json
+  if !(File.exists?("attributes.json"))
+    warn "Copy attributes.json.example attributes.json and try again."
+    exit
+  end
+
   attributes = JSON.parse(IO.read("attributes.json"))
 
   # Networking & hostname
