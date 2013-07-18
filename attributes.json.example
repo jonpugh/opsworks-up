@@ -1,11 +1,16 @@
 {
   "run_list": [
-    "recipe[apt]",
-    "recipe[mysql::server]"
+    "recipe[opsworks_initial_setup]",
+    "recipe[ssh_host_keys]",
+    "recipe[ssh_users]",
+    "recipe[mysql::client]",
+    "recipe[dependencies]",
+    "recipe[ebs]",
+    "recipe[opsworks_ganglia::client]"
   ],
   "vagrant": {
     "adapter": "wlan0",
-    "hostname": "db-a2",
+    "hostname": "instance_hostname",
     "host_only_ip": "10.10.10.10",
     "cookbooks_path": [
       "/path/to/opsworks-cookbooks",
@@ -15,11 +20,17 @@
   "opsworks": {
     "instance": {
       "instance_type": "t1.micro",
-      "hostname": "db-a2"
+      "hostname": "instance_hostname"
     }
   },
   "mysql": {
-    "server_root_password": "jwklfjkdlsajfklsajfkdsafdafsafas"
+    "server_root_password": "YouMustSetARootPWorYouWontBeAbleToFindOutWhatItIs"
+  },
+  "ssh_users": {
+    "me": {
+      "name": "me",
+      "public_key": ""
+    }
   }
 }
 
