@@ -43,10 +43,19 @@ Vagrant.configure("2") do |config|
 
         # Chef Solo
         configInstance.vm.provision :chef_solo do |chef|
+
+          # Add this layer's cookbooks path
           chef.cookbooks_path = layer["cookbooks_path"]
+
+          # Add this layer's Run List
           layer["run_list"].each do |recipe|
             chef.add_recipe recipe
           end
+
+          # Set instance attribute to be the currently running instance
+          attributes["opsworks"]["instance"] = instance
+
+          # Pass the rest of the attributes
           chef.json = attributes
         end
       end
