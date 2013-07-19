@@ -1,26 +1,41 @@
 {
-  "run_list": [
-    "recipe[opsworks_initial_setup]",
-    "recipe[ssh_host_keys]",
-    "recipe[ssh_users]",
-    "recipe[mysql::client]",
-    "recipe[dependencies]",
-    "recipe[ebs]",
-    "recipe[opsworks_ganglia::client]"
-  ],
   "vagrant": {
-    "adapter": "wlan0",
-    "hostname": "instance_hostname",
-    "host_only_ip": "10.10.10.10",
-    "cookbooks_path": [
-      "/path/to/opsworks-cookbooks",
-      "/path/to/custom-cookbooks"
-    ]
+    "adapter": "wlan0"
   },
   "opsworks": {
-    "instance": {
-      "instance_type": "t1.micro",
-      "hostname": "instance_hostname"
+    "layers": {
+      "layer1": {
+        "instances": {
+          "layer1-machine": {
+            "ip": "10.10.10.10",
+            "instance_type": "c1.medium",
+            "private_ip": "10.10.10.11"
+          }
+        },
+        "run_list":  [
+          "recipe[ssh_users]"
+        ],
+        "cookbooks_path": [
+          "/path/to/opsworks-cookbooks",
+          "/path/to/custom-cookbooks"
+        ]
+      },
+      "layer2": {
+        "instances": {
+          "layer2-machine": {
+            "ip": "20.20.20.20",
+            "instance_type": "c1.medium",
+            "private_ip": "20.20.20.21"
+          }
+        },
+        "run_list":  [
+          "recipe[ssh_users]"
+        ],
+        "cookbooks_path": [
+          "/path/to/opsworks-cookbooks",
+          "/path/to/custom-cookbooks"
+        ]
+      }
     }
   },
   "mysql": {
@@ -33,4 +48,3 @@
     }
   }
 }
-

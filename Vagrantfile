@@ -7,10 +7,6 @@
 #
 Vagrant.configure("2") do |config|
 
-  # All OPSWORKS use precise32 (or Amazon Linux)
-  config.vm.box = "precise32"
-  config.vm.box_url = "http://files.vagrantup.com/precise32.box"
-
   # Attributes are loaded from attributes.json
   if !(File.exists?("attributes.json"))
     warn "Copy attributes.json.example attributes.json and try again."
@@ -19,28 +15,41 @@ Vagrant.configure("2") do |config|
 
   attributes = JSON.parse(IO.read("attributes.json"))
 
-  # Networking & hostname
-  # Specify your network adapter in attributes.json
-  config.vm.network :public_network, :bridge => attributes["vagrant"]["adapter"]
+  # Loop through each layer
+  attributes["opsworks"]["layers"].each do |layerName, layer|
 
-  # Sets an available, host-only IP so you can always access the VM at the same IP
-  config.vm.network :private_network, ip: attributes["vagrant"]["host_only_ip"]
-  config.vm.hostname = attributes["vagrant"]["adapter"]
+    #loop through each instance
+    layer["instances"].each do |name, instance|
+      config.vm.define name do |configInstance|
 
-  # Install make.
-  # Uninstall chef 10.x (I cannot figure out how to prevent installation of this.)
-  # Install chef 0.9.18.  (OpsWorks)
-  # Install OpsWorks-compatible gems
-  #
-  config.vm.provision :shell, :inline => "apt-get install make; gem uninstall chef; gem install chef --version 0.9.18 --no-rdoc --no-ri --conservative; gem install bundler"
+        # All OPSWORKS use precise32 (or Amazon Linux)
+        configInstance.vm.box = "precise32"
+        configInstance.vm.box_url = "http://files.vagrantup.com/precise32.box"
 
-  # Adds cookbooks path and run list.
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = attributes["vagrant"]["cookbooks_path"]
-    attributes["run_list"].each do |recipe|
-      chef.add_recipe recipe
+        # Networking & hostname
+        # Specify your network adapter in attributes.json
+        configInstance.vm.network :public_network, :bridge => attributes["vagrant"]["adapter"]
+
+        # Sets an available, host-only IP so you can always access the VM at the same IP
+        configInstance.vm.network :private_network, ip: '10.10.10.10'
+        configInstance.vm.hostname = name
+
+        # Install make.
+        # Uninstall chef 10.x (I cannot figure out how to prevent installation of this.)
+        # Install chef 0.9.18.  (OpsWorks)
+        # Install OpsWorks-compatible gems
+        #
+        configInstance.vm.provision :shell, :inline => "apt-get install make; gem uninstall chef; gem install chef --version 0.9.18 --no-rdoc --no-ri --conservative; gem install bundler"
+
+        # Chef Solo
+        configInstance.vm.provision :chef_solo do |chef|
+          chef.cookbooks_path = layer["cookbooks_path"]
+          layer["run_list"].each do |recipe|
+            chef.add_recipe recipe
+          end
+          chef.json = attributes
+        end
+      end
     end
-    # Passes attributes through to chef run.
-    chef.json = attributes
   end
 end
