@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
         # Install chef 0.9.18.  (OpsWorks)
         # Install OpsWorks-compatible gems
         #
-        configInstance.vm.provision :shell, :inline => "apt-get install make; gem uninstall chef; gem install chef --version 0.9.18 --no-rdoc --no-ri --conservative; gem install bundler"
+        configInstance.vm.provision :shell, :inline => "bash /vagrant/pre-install.sh"
 
         # Chef Solo
         configInstance.vm.provision :chef_solo do |chef|
@@ -53,6 +53,7 @@ Vagrant.configure("2") do |config|
           end
 
           # Set instance attribute to be the currently running instance
+          instance["hostname"] = name
           attributes["opsworks"]["instance"] = instance
 
           # Pass the rest of the attributes
